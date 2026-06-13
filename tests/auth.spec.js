@@ -11,8 +11,8 @@ test.describe('F001 - Login Authentication', () => {
     await page.goto('/');
 
     // Fill in the form (same idea as send_keys in Selenium)
-    await page.getByRole('textbox', { name: 'Enter username' }).fill('berakgod');
-    await page.getByRole('textbox', { name: 'Enter password' }).fill('berakgod');
+    await page.getByRole('textbox', { name: 'Enter username' }).fill('dogdogdog');
+    await page.getByRole('textbox', { name: 'Enter password' }).fill('dogdogdog');
 
     // Click login button
     await page.getByRole('button', { name: 'Log in' }).click();
@@ -23,7 +23,7 @@ test.describe('F001 - Login Authentication', () => {
 
   test('TC-F001-02: Login with wrong password shows error', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('textbox', { name: 'Enter username' }).fill('berakgod');
+    await page.getByRole('textbox', { name: 'Enter username' }).fill('dogdogdog');
     await page.getByRole('textbox', { name: 'Enter password' }).fill('wrongpassword');
     await page.getByRole('button', { name: 'Log in' }).click();
 

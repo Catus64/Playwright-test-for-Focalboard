@@ -24,42 +24,46 @@ test.describe('F002 - Board CRUD', () => {
     await page.getByRole('textbox', { name: 'Untitled board' }).click();
 
     // 🔍 FIND WITH CODEGEN: click the rename/edit option from context menu
-    await page.getByRole('textbox', { name: 'Untitled board' }).fill('Test Board');
+    await page.getByRole('textbox', { name: 'Untitled board' }).fill('Edited Board');
+
+    await page.keyboard.press('Enter');
   });
 
-  // test('TC-F002-04: Delete a board', async ({ page }) => {
-  //   await page.goto('/');
 
-  //   // 🔍 FIND WITH CODEGEN: right click board in sidebar to get delete option
-  //   await page.locator('div').filter({ hasText: /^Renamed Board$/ }).first().click({ button: 'right' });
+  test('TC-F002-05: Duplicate a board', async ({ page }) => {
+    await page.goto('/');
 
-  //   // 🔍 FIND WITH CODEGEN: click delete from context menu
-  //   await page.getByRole('button', { name: 'Delete board' }).click();
+    // 🔍 FIND WITH CODEGEN: right click board to get duplicate option
+    await page.getByRole('button', { name: /Testing Board 1/ }).hover();
 
-  //   // 🔍 FIND WITH CODEGEN: confirm delete if a confirmation dialog appears
-  //   await page.getByRole('button', { name: 'Delete' }).click();
+    // Wait for the button to become visible
+    await page.waitForTimeout(500);
+    await page.getByRole('button', { name: /Testing Board 1/ }).locator('button').click();
+    await page.getByRole('button', { name: 'Duplicate board' }).click();
 
-  //   // Verify board no longer in sidebar
-  //   await expect(page.locator('div').filter({ hasText: /^Renamed Board$/ }).first()).not.toBeVisible();
-  // });
+    // 🔍 FIND WITH CODEGEN: click duplicate from context menu
 
-  // test('TC-F002-05: Duplicate a board', async ({ page }) => {
-  //   await page.goto('/');
+    // Verify duplicate appears — Focalboard usually names it "Copy of X"
+    // 🔍 FIND WITH CODEGEN: check what name Focalboard gives the duplicate
+    await expect(page.getByRole('button', { name: /Board 1 copy/ })).toBeVisible({ timeout: 10000 });
 
-  //   // First create a board to duplicate
-  //   await page.getByRole('button', { name: '+ New' }).click();
-  //   await page.getByRole('textbox', { name: 'Untitled', exact: true }).fill('Board To Duplicate');
-  //   await page.getByRole('button', { name: 'Close dialog' }).click();
+    //delete the duplicate to clean up
+    await page.getByRole('button', { name: /Testing Board 1 copy/ }).hover();
+    await page.waitForTimeout(500);
+    await page.getByRole('button', { name: /Testing Board 1 copy/ }).locator('button').click();
+    await page.getByRole('button', { name: 'Delete board' }).click();
+    await page.getByRole('button', { name: 'Delete' }).click();
+  });
 
-  //   // 🔍 FIND WITH CODEGEN: right click board to get duplicate option
-  //   await page.locator('div').filter({ hasText: /^Board To Duplicate$/ }).first().click({ button: 'right' });
+  test('TC-F002-04: Delete a board', async ({ page }) => {
+    await page.goto('/');
 
-  //   // 🔍 FIND WITH CODEGEN: click duplicate from context menu
-  //   await page.getByRole('button', { name: 'Duplicate' }).click();
 
-  //   // Verify duplicate appears — Focalboard usually names it "Copy of X"
-  //   // 🔍 FIND WITH CODEGEN: check what name Focalboard gives the duplicate
-  //   await expect(page.locator('div').filter({ hasText: /^Copy of Board To Duplicate$/ }).first()).toBeVisible();
-  // });
-
+    //delete the duplicate to clean up
+    await page.getByRole('button', { name: /Edited Board/ }).hover();
+    await page.waitForTimeout(500);
+    await page.getByRole('button', { name: /Edited Board/ }).locator('button').click();
+    await page.getByRole('button', { name: 'Delete board' }).click();
+    await page.getByRole('button', { name: 'Delete' }).click();
+  });
 });

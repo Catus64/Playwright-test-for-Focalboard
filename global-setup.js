@@ -6,8 +6,8 @@ module.exports = async function globalSetup() {
 
   // Login once
   await page.goto('http://localhost:8000');
-  await page.getByRole('textbox', { name: 'Enter username' }).fill('berakgod');
-  await page.getByRole('textbox', { name: 'Enter password' }).fill('berakgod');
+  await page.getByRole('textbox', { name: 'Enter username' }).fill('dogdogdog');
+  await page.getByRole('textbox', { name: 'Enter password' }).fill('dogdogdog');
   await page.getByRole('button', { name: 'Log in' }).click();
 
   // Wait until sidebar is visible (confirms login worked)
