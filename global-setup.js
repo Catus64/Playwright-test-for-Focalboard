@@ -2,19 +2,32 @@ const { chromium } = require('@playwright/test');
 
 module.exports = async function globalSetup() {
   const browser = await chromium.launch();
-  const page = await browser.newPage();
 
-  // Login once
-  await page.goto('http://localhost:8000');
-  await page.getByRole('textbox', { name: 'Enter username' }).fill('dogdogdog');
-  await page.getByRole('textbox', { name: 'Enter password' }).fill('dogdogdog');
-  await page.getByRole('button', { name: 'Log in' }).click();
+  // ─────────────────────────────────────────
+  // Login User A — dogdogdog
+  // ─────────────────────────────────────────
+  const pageA = await browser.newPage();
+  await pageA.goto('http://localhost:8000');
+  await pageA.getByRole('textbox', { name: 'Enter username' }).fill('dogdogdog');
+  await pageA.getByRole('textbox', { name: 'Enter password' }).fill('dogdogdog');
+  await pageA.getByRole('button', { name: 'Log in' }).click();
+  await pageA.waitForSelector('.Sidebar');
+  await pageA.context().storageState({ path: 'auth.json' });
+  console.log('User A session saved');
+  await pageA.close();
 
-  // Wait until sidebar is visible (confirms login worked)
-  await page.waitForSelector('.Sidebar');
-
-  // Save the session (cookies + localStorage) to a file
-  await page.context().storageState({ path: 'auth.json' });
+  // ─────────────────────────────────────────
+  // Login User B — testuser2
+  // ─────────────────────────────────────────
+  const pageB = await browser.newPage();
+  await pageB.goto('http://localhost:8000');
+  await pageB.getByRole('textbox', { name: 'Enter username' }).fill('something');
+  await pageB.getByRole('textbox', { name: 'Enter password' }).fill('something');
+  await pageB.getByRole('button', { name: 'Log in' }).click();
+  await pageB.waitForSelector('.Sidebar');
+  await pageB.context().storageState({ path: 'auth2.json' });
+  console.log('User B session saved');
+  await pageB.close();
 
   await browser.close();
 };
